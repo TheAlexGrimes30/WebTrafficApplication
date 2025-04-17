@@ -22,4 +22,5 @@ class StatusCreateView(CreateView):
 class StatusDetails(DetailView):
     model = Status
     template_name = "status_details.html"
+    context_object_name = "status"
 
