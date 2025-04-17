@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Status Detail{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Status Detail</h2>
+    <p><strong>ID:</strong> {{ object.id }}</p>
+    <p><strong>Status Name:</strong> {{ object.status_name }}</p>
+
+    <a href="{% url 'record_utils' %}" class="btn btn-secondary mt-3">Back to List</a>
+</div>
+{% endblock %}

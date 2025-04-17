@@ -15,8 +15,12 @@
         <tbody>
           {% for status in statuses %}
             <tr>
-              <td>{{ forloop.counter }}</td>
-              <td>{{ status.status_name }}</td>
+                <td>{{ forloop.counter }}</td>
+                <td>
+                  <a href="{% url 'status_detail' status.id %}">
+                    {{ status.status_name }}
+                  </a>
+                </td>
             </tr>
           {% endfor %}
         </tbody>
