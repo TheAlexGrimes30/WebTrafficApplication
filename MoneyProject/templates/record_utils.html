@@ -1,48 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %} Create new Status {% endblock %}
+{% block title %} Additional fields {% endblock %}
 
 {% block content %}
 
-    {% if statuses %}
-      <table class="table table-bordered table-hover">
-        <thead class="table-light">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Status Name</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for status in statuses %}
-            <tr id="status-{{ status.id }}">
-                <td>{{ forloop.counter }}</td>
-                <td>
-                  <a href="{% url 'status_detail' status.id %}">
-                    {{ status.status_name }}
-                  </a>
-                </td>
-                <td>
-                    <a href="{% url 'status_edit' status.id %}" class="btn btn-warning btn-sm">
-                        <i class="bi bi-pencil"></i> Edit
-                    </a>
-                    <form action="{% url 'status_delete' status.id %}" method="POST" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i> Delete
-                        </button>
-                    </form>
-                </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <p>No statuses found.</p>
-    {% endif %}
-
-    <div class="mb-4">
-        <a href="{% url 'status_create' %}" class="btn btn-primary">Add New Status</a>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title text-center">Manage Fields</h3>
     </div>
+    <div class="card-body d-flex justify-content-center">
+        <div class="btn-group-vertical" role="group">
+            <a href="{% url 'status_list' %}" class="btn btn-primary mb-2">Статусы</a>
+            <a href="#" class="btn btn-primary mb-2">Типы</a>
+            <a href="#" class="btn btn-primary mb-2">Категории</a>
+            <a href="#" class="btn btn-primary">Субкатегории</a>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

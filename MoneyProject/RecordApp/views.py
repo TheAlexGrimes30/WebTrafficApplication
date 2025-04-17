@@ -6,13 +6,15 @@ from django.views.generic import CreateView, DetailView, UpdateView
 from RecordApp.forms import StatusForm
 from RecordApp.models import Status
 
-
 def additional_view(request):
+    return render(request, "record_utils.html")
+
+def status_list_view(request):
     statuses = Status.objects.all()
     context = {
         "statuses": statuses
     }
-    return render(request, "record_utils.html", context=context)
+    return render(request, "status_list.html", context=context)
 
 class StatusCreateView(CreateView):
     model = Status
