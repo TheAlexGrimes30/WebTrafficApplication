@@ -13,4 +13,8 @@ class StatusCreateView(CreateView):
     success_url = reverse_lazy('record_utils')
 
 def additional_view(request):
-    return render(request, "record_utils.html")
+    statuses = Status.objects.all()
+    context = {
+        "statuses": statuses
+    }
+    return render(request, "record_utils.html", context=context)

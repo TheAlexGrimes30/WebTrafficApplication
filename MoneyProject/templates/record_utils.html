@@ -3,14 +3,30 @@
 {% block title %} Crate new Status {% endblock %}
 
 {% block content %}
-    <div class="container mt-4">
-        <div class="row">
-          <div class="col-md-12">
 
-            <div class="mb-4">
-              <a href="{% url 'status_create' %}" class="btn btn-primary">Add New Status</a>
-            </div>
-          </div>
-        </div>
+    {% if statuses %}
+      <table class="table table-bordered table-hover">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Status Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for status in statuses %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ status.status_name }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No statuses found.</p>
+    {% endif %}
+
+    <div class="mb-4">
+        <a href="{% url 'status_create' %}" class="btn btn-primary">Add New Status</a>
     </div>
+
 {% endblock %}
