@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} Crate new Status {% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+          <div class="col-md-12">
+
+            <div class="mb-4">
+              <a href="{% url 'status_create' %}" class="btn btn-primary">Add New Status</a>
+            </div>
+          </div>
+        </div>
+    </div>
+{% endblock %}

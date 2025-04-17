@@ -17,6 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from RecordApp.views import additional_view, StatusCreateView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('additional/', additional_view, name="record_utils"),
+    path('additional/create', StatusCreateView.as_view(), name="status_create"),
 ]
