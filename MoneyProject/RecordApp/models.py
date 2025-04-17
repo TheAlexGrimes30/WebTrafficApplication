@@ -13,7 +13,7 @@ class Status(models.Model):
         verbose_name_plural = "Статусы"
 
 
-class Type(models.Model):
+class TransactionType(models.Model):
     type_name = models.CharField(max_length=64, unique=True)
 
     def __str__(self):
@@ -26,7 +26,7 @@ class Type(models.Model):
 
 class Category(models.Model):
     category_name = models.CharField(max_length=128, unique=True)
-    type_model = models.ForeignKey(Type, on_delete=models.CASCADE)
+    type_model = models.ForeignKey(TransactionType, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.category_name
@@ -50,7 +50,7 @@ class SubCategory(models.Model):
 
 class DDSRecord(models.Model):
     status = models.ForeignKey(Status, on_delete=models.PROTECT)
-    type_model = models.ForeignKey(Type, on_delete=models.PROTECT)
+    type_model = models.ForeignKey(TransactionType, on_delete=models.PROTECT)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     subcategory = models.ForeignKey(SubCategory, on_delete=models.PROTECT)
     sum_amount = models.IntegerField(validators=[MinValueValidator(1)])
