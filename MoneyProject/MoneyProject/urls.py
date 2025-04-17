@@ -17,11 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from RecordApp.views import additional_view, StatusCreateView, StatusDetails
+from RecordApp.views import additional_view, StatusCreateView, StatusDetails, StatusEditView, StatusDeleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('additional/', additional_view, name="record_utils"),
     path('additional/create', StatusCreateView.as_view(), name="status_create"),
-    path('additional/<int:pk>/', StatusDetails.as_view(), name="status_detail")
+    path('additional/<int:pk>/', StatusDetails.as_view(), name="status_detail"),
+    path('additional/edit/<int:pk>/', StatusEditView.as_view(), name="status_edit"),
+    path('status/delete/<int:pk>/', StatusDeleteView.as_view(), name="status_delete"),
 ]
