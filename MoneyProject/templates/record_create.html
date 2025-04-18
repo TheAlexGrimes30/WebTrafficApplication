@@ -8,14 +8,17 @@
     {% csrf_token %}
 
     <div class="mb-3">{{ form.status.label_tag }}{{ form.status }}</div>
-    <div class="mb-3">{{ form.type_model.label_tag }}{{ form.type_model }}</div>
 
-    <div class="mb-3">
+    <div class="mb-3" id="type-wrapper">
+      {{ form.type_model.label_tag }}{{ form.type_model }}
+    </div>
+
+    <div class="mb-3" id="category-wrapper" style="display: none;">
       <label for="id_category">Category</label>
       <select id="id_category" name="category" class="form-select">
         <option value="">Не выбрано</option>
         {% for cat in categories %}
-          <option value="{{ cat.id }}">{{ cat.category_name }}</option>
+          <option value="{{ cat.id }}" data-type="{{ cat.type_model.id }}">{{ cat.category_name }}</option>
         {% endfor %}
       </select>
     </div>
@@ -41,10 +44,39 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      const typeSelect = document.getElementById('id_type_model');
       const categorySelect = document.getElementById('id_category');
       const subcategorySelect = document.getElementById('id_subcategory');
+      const categoryWrapper = document.getElementById('category-wrapper');
       const subcategoryWrapper = document.getElementById('subcategory-wrapper');
-      const allOptions = Array.from(subcategorySelect.options).slice(1);
+      const allCategoryOptions = Array.from(categorySelect.options).slice(1);
+      const allSubcategoryOptions = Array.from(subcategorySelect.options).slice(1);
+
+      if (!typeSelect.value) {
+        categoryWrapper.style.display = 'none';
+        subcategoryWrapper.style.display = 'none';
+      }
+
+      typeSelect.addEventListener('change', function () {
+        const selectedTypeId = this.value;
+
+        categorySelect.innerHTML = '<option value="">Не выбрано</option>';
+        subcategorySelect.innerHTML = '<option value="">Не выбрано</option>';
+        categoryWrapper.style.display = 'none';
+        subcategoryWrapper.style.display = 'none';
+
+        if (selectedTypeId) {
+          allCategoryOptions.forEach(option => {
+            if (option.getAttribute('data-type') === selectedTypeId) {
+              categorySelect.appendChild(option);
+            }
+          });
+
+          if (categorySelect.options.length > 1) {
+            categoryWrapper.style.display = 'block';
+          }
+        }
+      });
 
       categorySelect.addEventListener('change', function () {
         const selectedCategoryId = this.value;
@@ -53,7 +85,7 @@
         subcategoryWrapper.style.display = 'none';
 
         if (selectedCategoryId) {
-          allOptions.forEach(option => {
+          allSubcategoryOptions.forEach(option => {
             if (option.getAttribute('data-category') === selectedCategoryId) {
               subcategorySelect.appendChild(option);
             }
