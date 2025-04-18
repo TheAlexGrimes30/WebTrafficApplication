@@ -122,7 +122,7 @@ def subcategory_list_view(request):
 class SubCategoryDetails(DetailView):
     model = SubCategory
     template_name = "subcategory_details.html"
-    context_object_name = "category"
+    context_object_name = "subcategory"
 
 class SubCategoryEditView(UpdateView):
     model = SubCategory
