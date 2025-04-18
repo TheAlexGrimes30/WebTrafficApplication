@@ -148,6 +148,12 @@ class RecordCreateView(CreateView):
     template_name = "record_create.html"
     success_url = reverse_lazy("home")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["subcategories"] = SubCategory.objects.all()
+        context["categories"] = Category.objects.all()
+        return context
+
 class RecordEditView(UpdateView):
     model = DDSRecord
     form_class = DDSRecordForm

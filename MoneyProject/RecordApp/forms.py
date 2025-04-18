@@ -43,3 +43,10 @@ class DDSRecordForm(ModelForm):
             'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'date_created': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['status'].empty_label = '---------'
+        self.fields['type_model'].empty_label = '---------'
+        self.fields['category'].empty_label = '---------'
+        self.fields['subcategory'].empty_label = '---------'
