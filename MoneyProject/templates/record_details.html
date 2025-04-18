@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Детали записи{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Детали записи</h2>
+
+    <p><strong>ID:</strong> {{ record.id }}</p>
+    <p><strong>Статус:</strong> {{ record.status.status_name }}</p>
+    <p><strong>Тип модели:</strong> {{ record.type_model.type_name }}</p>
+    <p><strong>Категория:</strong> {{ record.category.category_name }}</p>
+    <p><strong>Подкатегория:</strong> {{ record.subcategory.subcategory_name }}</p>
+    <p><strong>Сумма:</strong> {{ record.sum_amount }}</p>
+    <p><strong>Комментарий:</strong> {{ record.comment|default:"—" }}</p>
+    <p><strong>Дата создания:</strong> {{ record.date_created|date:"d.m.Y" }}</p>
+
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Назад к списку записей</a>
+</div>
+{% endblock %}

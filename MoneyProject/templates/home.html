@@ -1,7 +1,56 @@
 {% extends 'base.html' %}
 
-{% block title %} Crate new Category {% endblock %}
+{% block title %} DDS Records {% endblock %}
 
 {% block content %}
-  Главная страница
+
+  {% if records %}
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Status</th>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Subcategory</th>
+          <th>Amount</th>
+          <th>Comment</th>
+          <th>Date Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records %}
+          <tr id="record-{{ record.id }}">
+            <td>{{ forloop.counter }}</td>
+            <td>{{ record.status.status_name }}</td>
+            <td>{{ record.type_model.type_name }}</td>
+            <td>{{ record.category.category_name }}</td>
+            <td>{{ record.subcategory.subcategory_name }}</td>
+            <td>{{ record.sum_amount }}</td>
+            <td>{{ record.comment|default:"—" }}</td>
+            <td>{{ record.date_created|date:"d.m.Y" }}</td>
+            <td>
+              <a href="{% url 'record_edit' record.id %}" class="btn btn-warning btn-sm">
+                <i class="bi bi-pencil"></i> Edit
+              </a>
+              <form action="{% url 'record_delete' record.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No records found.</p>
+  {% endif %}
+
+  <div class="mb-4">
+    <a href="{% url 'record_create' %}" class="btn btn-primary">Add New Record</a>
+  </div>
+
 {% endblock %}

@@ -147,3 +147,15 @@ class RecordCreateView(CreateView):
     form_class = DDSRecordForm
     template_name = "record_create.html"
     success_url = reverse_lazy("home")
+
+class RecordEditView(UpdateView):
+    model = DDSRecord
+    form_class = DDSRecordForm
+    template_name = "record_edit.html"
+    success_url = reverse_lazy("home")
+
+class RecordDeleteView(View):
+    def post(self, request, pk, *args, **kwargs):
+        record = get_object_or_404(DDSRecord, pk=pk)
+        record.delete()
+        return redirect('home')
