@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %} Create new Subcategory {% endblock %}
+
+{% block content %}
+
+    {% if subcategories %}
+      <table class="table table-bordered table-hover">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Subcategory Name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for subcategory in subcategories %}
+            <tr id="category-{{ category.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td>
+                  <a href="{% url 'subcategory_detail' subcategory.id %}">
+                    {{ subcategory.subcategory_name }}
+                  </a>
+                </td>
+                <td>
+                    {{ subcategory.category.category_name }}
+                </td>
+                <td>
+                    <a href="{% url 'subcategory_edit' subcategory.id %}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <form action="{% url 'subcategory_delete' subcategory.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No subcategories found.</p>
+    {% endif %}
+
+    <div class="mb-4">
+        <a href="{% url 'subcategory_create' %}" class="btn btn-primary">Add New Subcategory</a>
+    </div>
+
+{% endblock %}

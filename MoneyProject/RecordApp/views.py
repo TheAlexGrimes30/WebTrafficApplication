@@ -3,8 +3,8 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, DetailView, UpdateView
 
-from RecordApp.forms import StatusForm, TransactionTypeForm, CategoryForm
-from RecordApp.models import Status, TransactionType, Category
+from RecordApp.forms import StatusForm, TransactionTypeForm, CategoryForm, SubCategoryForm
+from RecordApp.models import Status, TransactionType, Category, SubCategory
 
 
 def additional_view(request):
@@ -104,3 +104,33 @@ class CategoryDeleteView(View):
         category = get_object_or_404(Category, pk=pk)
         category.delete()
         return redirect('category_list')
+
+def subcategory_list_view(request):
+    subcategories = SubCategory.objects.select_related("category").all()
+    context = {
+        "subcategories": subcategories
+    }
+    return render(request, "subcategory_list.html", context=context)
+
+class SubCategoryDetails(DetailView):
+    model = SubCategory
+    template_name = "subcategory_details.html"
+    context_object_name = "category"
+
+class SubCategoryEditView(UpdateView):
+    model = SubCategory
+    form_class = SubCategoryForm
+    template_name = "subcategory_edit.html"
+    success_url = reverse_lazy("subcategory_list")
+
+class SubCategoryCreateView(CreateView):
+    model = SubCategory
+    form_class = SubCategoryForm
+    template_name = "subcategory_create.html"
+    success_url = reverse_lazy("subcategory_list")
+
+class SubCategoryDeleteView(View):
+    def post(self, request, pk, *args, **kwargs):
+        subcategory = get_object_or_404(SubCategory, pk=pk)
+        subcategory.delete()
+        return redirect('subcategory_list')
