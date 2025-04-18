@@ -1,56 +1,134 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %} DDS Records {% endblock %}
+{% block title %}DDS Records{% endblock %}
 
 {% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">DDS Records</h2>
+
+  <form method="get" class="row g-3 mb-4">
+  <div class="col-md-2">
+    <label for="status" class="form-label">Статус</label>
+    <select class="form-select" name="status" id="status">
+      <option value="">Все</option>
+      {% for s in statuses %}
+        <option value="{{ s.id }}" {% if filter_data.status == s.id|stringformat:"s" %}selected{% endif %}>{{ s.status_name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <label for="type" class="form-label">Тип</label>
+    <select class="form-select" name="type" id="type">
+      <option value="">Все</option>
+      {% for t in types %}
+        <option value="{{ t.id }}" {% if filter_data.type == t.id|stringformat:"s" %}selected{% endif %}>{{ t.type_name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <label for="category" class="form-label">Категория</label>
+    <select class="form-select" name="category" id="category">
+      <option value="">Все</option>
+      {% for c in categories %}
+        <option value="{{ c.id }}" {% if filter_data.category == c.id|stringformat:"s" %}selected{% endif %}>{{ c.category_name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <label for="subcategory" class="form-label">Подкатегория</label>
+    <select class="form-select" name="subcategory" id="subcategory">
+      <option value="">Все</option>
+      {% for sc in subcategories %}
+        <option value="{{ sc.id }}" {% if filter_data.subcategory == sc.id|stringformat:"s" %}selected{% endif %}>{{ sc.subcategory_name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <label class="form-label">С даты</label>
+    <input type="date" name="start_date" class="form-control" value="{{ filter_data.start_date }}">
+  </div>
+
+  <div class="col-md-2">
+    <label class="form-label">По дату</label>
+    <input type="date" name="end_date" class="form-control" value="{{ filter_data.end_date }}">
+  </div>
+
+  <div class="col-md-12 text-end">
+    <button type="submit" class="btn btn-primary mt-2">Применить фильтр</button>
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-2">Сбросить</a>
+  </div>
+</form>
 
   {% if records %}
-    <table class="table table-bordered table-hover">
-      <thead class="table-light">
+  <table class="table table-bordered table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>#</th>
+        <th>Status</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>Subcategory</th>
+        <th>Amount</th>
+        <th>Comment</th>
+        <th>Date Created</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in records %}
         <tr>
-          <th>#</th>
-          <th>Status</th>
-          <th>Type</th>
-          <th>Category</th>
-          <th>Subcategory</th>
-          <th>Amount</th>
-          <th>Comment</th>
-          <th>Date Created</th>
-          <th>Actions</th>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ record.status.status_name }}</td>
+          <td>{{ record.type_model.type_name }}</td>
+          <td>{{ record.category.category_name }}</td>
+          <td>{{ record.subcategory.subcategory_name }}</td>
+          <td>{{ record.sum_amount }}</td>
+          <td>{{ record.comment|default:"—" }}</td>
+          <td>{{ record.date_created|date:"d.m.Y" }}</td>
+          <td>
+            <a href="{% url 'record_edit' record.id %}" class="btn btn-warning btn-sm">Edit</a>
+            <form action="{% url 'record_delete' record.id %}" method="post" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        {% for record in records %}
-          <tr id="record-{{ record.id }}">
-            <td>{{ forloop.counter }}</td>
-            <td>{{ record.status.status_name }}</td>
-            <td>{{ record.type_model.type_name }}</td>
-            <td>{{ record.category.category_name }}</td>
-            <td>{{ record.subcategory.subcategory_name }}</td>
-            <td>{{ record.sum_amount }}</td>
-            <td>{{ record.comment|default:"—" }}</td>
-            <td>{{ record.date_created|date:"d.m.Y" }}</td>
-            <td>
-              <a href="{% url 'record_edit' record.id %}" class="btn btn-warning btn-sm">
-                <i class="bi bi-pencil"></i> Edit
-              </a>
-              <form action="{% url 'record_delete' record.id %}" method="POST" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger btn-sm">
-                  <i class="bi bi-trash"></i> Delete
-                </button>
-              </form>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      {% if records.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode|safe }}&{% endif %}page={{ records.previous_page_number }}">Previous</a>
+        </li>
+      {% endif %}
+
+      {% for num in records.paginator.page_range %}
+        <li class="page-item {% if records.number == num %}active{% endif %}">
+          <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode|safe }}&{% endif %}page={{ num }}">{{ num }}</a>
+        </li>
+      {% endfor %}
+
+      {% if records.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode|safe }}&{% endif %}page={{ records.next_page_number }}">Next</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
   {% else %}
     <p>No records found.</p>
   {% endif %}
 
-  <div class="mb-4">
-    <a href="{% url 'record_create' %}" class="btn btn-primary">Add New Record</a>
+  <div class="mt-4">
+    <a href="{% url 'record_create' %}" class="btn btn-success">Add New Record</a>
   </div>
-
+</div>
 {% endblock %}

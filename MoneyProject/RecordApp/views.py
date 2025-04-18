@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.utils.dateparse import parse_date
 from django.views import View
-from django.views.generic import CreateView, DetailView, UpdateView
+from django.views.generic import CreateView, DetailView, UpdateView, ListView
 
 from RecordApp.forms import StatusForm, TransactionTypeForm, CategoryForm, SubCategoryForm, DDSRecordForm
 from RecordApp.models import Status, TransactionType, Category, SubCategory, DDSRecord
@@ -10,12 +11,51 @@ from RecordApp.models import Status, TransactionType, Category, SubCategory, DDS
 def additional_view(request):
     return render(request, "record_utils.html")
 
-def home_view(request):
-    records = DDSRecord.objects.all()
-    context = {
-        "records": records
-    }
-    return render(request, "home.html", context=context)
+class HomeView(ListView):
+    model = DDSRecord
+    template_name = "home.html"
+    context_object_name = "records"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = DDSRecord.objects.select_related(
+            'status', 'type_model', 'category', 'subcategory'
+        ).all()
+
+        status = self.request.GET.get('status')
+        type_ = self.request.GET.get('type')
+        category = self.request.GET.get('category')
+        subcategory = self.request.GET.get('subcategory')
+        date_from = self.request.GET.get('date_from')
+        date_to = self.request.GET.get('date_to')
+
+        if status:
+            queryset = queryset.filter(status_id=status)
+
+        if type_:
+            queryset = queryset.filter(type_model_id=type_)
+
+        if category:
+            queryset = queryset.filter(category_id=category)
+
+        if subcategory:
+            queryset = queryset.filter(subcategory_id=subcategory)
+
+        if date_from:
+            queryset = queryset.filter(date_created__gte=parse_date(date_from))
+        if date_to:
+            queryset = queryset.filter(date_created__lte=parse_date(date_to))
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['statuses'] = Status.objects.all()
+        context['types'] = TransactionType.objects.all()
+        context['categories'] = Category.objects.all()
+        context['subcategories'] = SubCategory.objects.all()
+        context['filter_data'] = self.request.GET
+        return context
 
 def status_list_view(request):
     statuses = Status.objects.all()
