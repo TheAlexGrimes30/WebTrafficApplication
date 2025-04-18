@@ -163,17 +163,9 @@ class RecordEditView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        record = self.get_object()
-
-        categories = Category.objects.all()
-        subcategories = SubCategory.objects.filter(category=record.category)
-
-        context['categories'] = categories
-        context['subcategories'] = subcategories
-
-        context['selected_category'] = record.category.id if record.category else None
-        context['selected_subcategory'] = record.subcategory.id if record.subcategory else None
-
+        context["types"] = TransactionType.objects.all()
+        context["subcategories"] = SubCategory.objects.all()
+        context["categories"] = Category.objects.all()
         return context
 
 class RecordDeleteView(View):
