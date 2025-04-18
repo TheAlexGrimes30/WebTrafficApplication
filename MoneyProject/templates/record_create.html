@@ -14,18 +14,17 @@
     <div class="mb-3">
       <label for="id_category">Category</label>
       <select id="id_category" name="category" class="form-select">
-        <option value="">---------</option>
+        <option value="">Не выбрано</option>
         {% for cat in categories %}
           <option value="{{ cat.id }}">{{ cat.category_name }}</option>
         {% endfor %}
       </select>
     </div>
 
-    <!-- Subcategory -->
     <div class="mb-3" id="subcategory-wrapper" style="display: none;">
       <label for="id_subcategory">Subcategory</label>
       <select id="id_subcategory" name="subcategory" class="form-select">
-        <option value="">---------</option>
+        <option value="">Не выбрано</option>
         {% for sub in subcategories %}
           <option value="{{ sub.id }}" data-category="{{ sub.category.id }}">{{ sub.subcategory_name }}</option>
         {% endfor %}
@@ -51,7 +50,7 @@
       categorySelect.addEventListener('change', function () {
         const selectedCategoryId = this.value;
 
-        subcategorySelect.innerHTML = '<option value="">---------</option>';
+        subcategorySelect.innerHTML = '<option value="">Не выбрано</option>';
         subcategoryWrapper.style.display = 'none';
 
         if (selectedCategoryId) {

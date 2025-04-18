@@ -46,7 +46,7 @@ class DDSRecordForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['status'].empty_label = '---------'
-        self.fields['type_model'].empty_label = '---------'
-        self.fields['category'].empty_label = '---------'
-        self.fields['subcategory'].empty_label = '---------'
+        self.fields['status'].empty_label = 'Не выбрано'
+        self.fields['type_model'].empty_label = 'Не выбрано'
+        self.fields['category'].empty_label = 'Не выбрано'
+        self.fields['subcategory'].empty_label = 'Не выбрано'
