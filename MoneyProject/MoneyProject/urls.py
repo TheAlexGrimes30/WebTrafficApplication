@@ -20,10 +20,11 @@ from django.urls import path
 from RecordApp.views import additional_view, StatusCreateView, StatusDetails, StatusEditView, StatusDeleteView, \
     status_list_view, TypeCreateView, TypeDetails, TypeEditView, TypeDeleteView, type_list_view, category_list_view, \
     CategoryCreateView, CategoryDetails, CategoryEditView, CategoryDeleteView, subcategory_list_view, \
-    SubCategoryCreateView, SubCategoryDetails, SubCategoryEditView, SubCategoryDeleteView
+    SubCategoryCreateView, SubCategoryDetails, SubCategoryEditView, SubCategoryDeleteView, RecordCreateView, home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home_view, name="home"),
     path('additional/status_list/', status_list_view, name="status_list"),
     path('additional/', additional_view, name="record_utils"),
     path('additional/status_list/create', StatusCreateView.as_view(), name="status_create"),
@@ -45,4 +46,5 @@ urlpatterns = [
     path('additional/subcategory_list/<int:pk>/', SubCategoryDetails.as_view(), name="subcategory_detail"),
     path('additional/subcategory_list/edit/<int:pk>/', SubCategoryEditView.as_view(), name="subcategory_edit"),
     path('additional/subcategory_list/delete/<int:pk>/', SubCategoryDeleteView.as_view(), name="subcategory_delete"),
+    path('create/', RecordCreateView.as_view(), name="record_create"),
 ]

@@ -3,12 +3,15 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, DetailView, UpdateView
 
-from RecordApp.forms import StatusForm, TransactionTypeForm, CategoryForm, SubCategoryForm
-from RecordApp.models import Status, TransactionType, Category, SubCategory
+from RecordApp.forms import StatusForm, TransactionTypeForm, CategoryForm, SubCategoryForm, DDSRecordForm
+from RecordApp.models import Status, TransactionType, Category, SubCategory, DDSRecord
 
 
 def additional_view(request):
     return render(request, "record_utils.html")
+
+def home_view(request):
+    return render(request, "home.html")
 
 def status_list_view(request):
     statuses = Status.objects.all()
@@ -134,3 +137,9 @@ class SubCategoryDeleteView(View):
         subcategory = get_object_or_404(SubCategory, pk=pk)
         subcategory.delete()
         return redirect('subcategory_list')
+
+class RecordCreateView(CreateView):
+    model = DDSRecord
+    form_class = DDSRecordForm
+    template_name = "record_create.html"
+    success_url = reverse_lazy("home")

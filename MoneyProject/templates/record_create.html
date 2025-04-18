@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %} Create new Type {% endblock %}
+{% block title %} Create new Record {% endblock %}
 
 {% block content %}
-  <h2 class="mb-4">Create New Type</h2>
+  <h2 class="mb-4">Create New Record</h2>
   <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
