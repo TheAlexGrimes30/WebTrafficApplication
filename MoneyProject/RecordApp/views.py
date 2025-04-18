@@ -75,7 +75,7 @@ class TypeDeleteView(View):
         transaction_type.delete()
         return redirect('type_list')
 
-def categories_list_view(request):
+def category_list_view(request):
     categories = Category.objects.select_related("type_model").all()
     context = {
         "categories": categories
