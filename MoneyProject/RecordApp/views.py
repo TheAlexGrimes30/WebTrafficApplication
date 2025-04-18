@@ -160,6 +160,21 @@ class RecordEditView(UpdateView):
     template_name = "record_edit.html"
     success_url = reverse_lazy("home")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        record = self.get_object()
+
+        categories = Category.objects.all()
+        subcategories = SubCategory.objects.filter(category=record.category)
+
+        context['categories'] = categories
+        context['subcategories'] = subcategories
+
+        context['selected_category'] = record.category.id if record.category else None
+        context['selected_subcategory'] = record.subcategory.id if record.subcategory else None
+
+        return context
+
 class RecordDeleteView(View):
     def post(self, request, pk, *args, **kwargs):
         record = get_object_or_404(DDSRecord, pk=pk)
