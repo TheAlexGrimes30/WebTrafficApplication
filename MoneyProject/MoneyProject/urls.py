@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from RecordApp.views import additional_view, StatusCreateView, StatusDetails, StatusEditView, StatusDeleteView, \
-    status_list_view
+    status_list_view, TypeCreateView, TypeDetails, TypeEditView, TypeDeleteView, type_list_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +27,10 @@ urlpatterns = [
     path('additional/status_list/create', StatusCreateView.as_view(), name="status_create"),
     path('additional/status_list/<int:pk>/', StatusDetails.as_view(), name="status_detail"),
     path('additional/status_list/edit/<int:pk>/', StatusEditView.as_view(), name="status_edit"),
-    path('status/status_list/delete/<int:pk>/', StatusDeleteView.as_view(), name="status_delete"),
+    path('additional/status_list/delete/<int:pk>/', StatusDeleteView.as_view(), name="status_delete"),
+    path('additional/type_list/', type_list_view, name="type_list"),
+    path('additional/type_list/create', TypeCreateView.as_view(), name="type_create"),
+    path('additional/type_list/<int:pk>/', TypeDetails.as_view(), name="type_detail"),
+    path('additional/type_list/edit/<int:pk>/', TypeEditView.as_view(), name="type_edit"),
+    path('additional/type_list/delete/<int:pk>/', TypeDeleteView.as_view(), name="type_delete"),
 ]

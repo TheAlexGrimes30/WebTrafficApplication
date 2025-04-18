@@ -3,8 +3,9 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, DetailView, UpdateView
 
-from RecordApp.forms import StatusForm
-from RecordApp.models import Status
+from RecordApp.forms import StatusForm, TransactionTypeForm
+from RecordApp.models import Status, TransactionType
+
 
 def additional_view(request):
     return render(request, "record_utils.html")
@@ -20,7 +21,7 @@ class StatusCreateView(CreateView):
     model = Status
     form_class = StatusForm
     template_name = "status_create.html"
-    success_url = reverse_lazy('record_utils')
+    success_url = reverse_lazy('status_list')
 
 class StatusDetails(DetailView):
     model = Status
@@ -31,7 +32,7 @@ class StatusEditView(UpdateView):
     model = Status
     form_class = StatusForm
     template_name = 'status_edit.html'
-    success_url = reverse_lazy('record_utils')
+    success_url = reverse_lazy('status_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -42,5 +43,34 @@ class StatusDeleteView(View):
     def post(self, request, pk, *args, **kwargs):
         status = get_object_or_404(Status, pk=pk)
         status.delete()
-        return redirect('record_utils')
+        return redirect('status_list')
 
+def type_list_view(request):
+    types = TransactionType.objects.all()
+    context = {
+        "types": types
+    }
+    return render(request, "type_list.html", context=context)
+
+class TypeCreateView(CreateView):
+    model = TransactionType
+    form_class = TransactionTypeForm
+    template_name = "type_create.html"
+    success_url = reverse_lazy("type_list")
+
+class TypeDetails(DetailView):
+    model = TransactionType
+    template_name = "type_details.html"
+    context_object_name = "type"
+
+class TypeEditView(UpdateView):
+    model = TransactionType
+    form_class = TransactionTypeForm
+    template_name = "type_edit.html"
+    success_url = reverse_lazy("type_list")
+
+class TypeDeleteView(View):
+    def post(self, request, pk, *args, **kwargs):
+        transaction_type = get_object_or_404(TransactionType, pk=pk)
+        transaction_type.delete()
+        return redirect('type_list')

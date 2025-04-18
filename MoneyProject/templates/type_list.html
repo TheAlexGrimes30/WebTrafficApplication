@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} Create new Type {% endblock %}
+
+{% block content %}
+
+    {% if types %}
+      <table class="table table-bordered table-hover">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Type Name</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for type in types %}
+            <tr id="type-{{ type.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td>
+                  <a href="{% url 'type_detail' type.id %}">
+                    {{ type.type_name }}
+                  </a>
+                </td>
+                <td>
+                    <a href="{% url 'type_edit' type.id %}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <form action="{% url 'type_delete' type.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No types found.</p>
+    {% endif %}
+
+    <div class="mb-4">
+        <a href="{% url 'type_create' %}" class="btn btn-primary">Add New Type</a>
+    </div>
+
+{% endblock %}
