@@ -33,7 +33,7 @@ class SubCategoryForm(ModelForm):
 class DDSRecordForm(ModelForm):
     class Meta:
         model = DDSRecord
-        fields = ['status', 'type_model', 'category', 'subcategory', 'sum_amount', 'comment']
+        fields = ['status', 'type_model', 'category', 'subcategory', 'sum_amount', 'comment', 'date_created']
         widgets = {
             'status': forms.Select(attrs={'class': 'form-select'}),
             'type_model': forms.Select(attrs={'class': 'form-select'}),
@@ -41,4 +41,5 @@ class DDSRecordForm(ModelForm):
             'subcategory': forms.Select(attrs={'class': 'form-select'}),
             'sum_amount': forms.NumberInput(attrs={'class': 'form-control'}),
             'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'date_created': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }

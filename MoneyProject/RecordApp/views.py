@@ -11,7 +11,11 @@ def additional_view(request):
     return render(request, "record_utils.html")
 
 def home_view(request):
-    return render(request, "home.html")
+    records = DDSRecord.objects.all()
+    context = {
+        "records": records
+    }
+    return render(request, "home.html", context=context)
 
 def status_list_view(request):
     statuses = Status.objects.all()
