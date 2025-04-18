@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Детали категории{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Детали категории</h2>
+
+    <p><strong>ID:</strong> {{ category.id }}</p>
+    <p><strong>Название категории:</strong> {{ category.category_name }}</p>
+    <p><strong>Тип модели:</strong> {{ category.type_model }}</p>
+
+    <a href="{% url 'record_utils' %}" class="btn btn-secondary mt-3">Назад к списку</a>
+</div>
+{% endblock %}

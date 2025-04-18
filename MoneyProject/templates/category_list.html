@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %} Create new Category {% endblock %}
+
+{% block content %}
+
+    {% if categories %}
+      <table class="table table-bordered table-hover">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Category Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for category in categories %}
+            <tr id="category-{{ category.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td>
+                  <a href="{% url 'category_detail' category.id %}">
+                    {{ category.category_name }}
+                  </a>
+                </td>
+                <td>
+                    {{ category.type_model.type_name }}
+                </td>
+                <td>
+                    <a href="{% url 'category_edit' category.id %}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <form action="{% url 'category_delete' category.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No categories found.</p>
+    {% endif %}
+
+    <div class="mb-4">
+        <a href="{% url 'category_create' %}" class="btn btn-primary">Add New Category</a>
+    </div>
+
+{% endblock %}

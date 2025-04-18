@@ -3,8 +3,8 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, DetailView, UpdateView
 
-from RecordApp.forms import StatusForm, TransactionTypeForm
-from RecordApp.models import Status, TransactionType
+from RecordApp.forms import StatusForm, TransactionTypeForm, CategoryForm
+from RecordApp.models import Status, TransactionType, Category
 
 
 def additional_view(request):
@@ -74,3 +74,33 @@ class TypeDeleteView(View):
         transaction_type = get_object_or_404(TransactionType, pk=pk)
         transaction_type.delete()
         return redirect('type_list')
+
+def categories_list_view(request):
+    categories = Category.objects.select_related("type_model").all()
+    context = {
+        "categories": categories
+    }
+    return render(request, "category_list.html", context=context)
+
+class CategoryDetails(DetailView):
+    model = Category
+    template_name = "category_details.html"
+    context_object_name = "category"
+
+class CategoryEditView(UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = "category_edit.html"
+    success_url = reverse_lazy("category_list")
+
+class CategoryCreateView(CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = "category_create.html"
+    success_url = reverse_lazy("category_list")
+
+class CategoryDeleteView(View):
+    def post(self, request, pk, *args, **kwargs):
+        category = get_object_or_404(Category, pk=pk)
+        category.delete()
+        return redirect('category_list')
